@@ -1,31 +1,30 @@
 <?php
-// Inicia a sessão
+
 session_start();
 
-// Verifica se o usuário já está logado, se sim, redireciona para a página do dashboard
+
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: dashboard.php");
     exit;
 }
 
-// Verifica se o formulário foi submetido
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    // Conecta ao banco de dados
+    
     $conn = new mysqli("localhost", "root", "", "sistema");
 
-    // Verifica a conexão
+    
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Consulta o banco de dados para verificar o usuário e a senha
+    
     $sql = "SELECT id FROM usuario WHERE username = '$username' AND password = '$password'";
     $result = $conn->query($sql);
 
-    // Verifica se o usuário e a senha estão corretos
     if ($result->num_rows > 0) {
         $_SESSION["loggedin"] = true;
         $_SESSION["username"] = $username;

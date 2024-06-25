@@ -1,8 +1,7 @@
 <?php
-// Inicia a sessão
 session_start();
 
-// Desfaz todas as variáveis de sessão
+
 $_SESSION = array();
 
 

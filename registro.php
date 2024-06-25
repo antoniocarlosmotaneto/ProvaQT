@@ -1,38 +1,35 @@
 <?php
-// Inicia a sessão
 session_start();
 
-// Verifica se o usuário já está logado, se sim, redireciona para a página do dashboard
+
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: dashboard.php");
     exit;
 }
 
-// Definir variáveis para armazenar mensagens de erro ou sucesso
 $error = "";
 $success = "";
 
-// Verifica se o formulário de registro foi submetido
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     $username = $_POST["reg_username"];
     $password = $_POST["reg_password"];
-    $nivel_acesso = intval($_POST["nivel_acesso"]); // Converte o valor para um número inteiro
+    $nivel_acesso = intval($_POST["nivel_acesso"]);
 
-    // Conecta ao banco de dados
+    
     $conn = new mysqli("localhost", "root", "", "sistema");
 
-    // Verifica a conexão
+    
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Verifica se o usuário já existe
+    
     $check_username = "SELECT id FROM usuario WHERE username = '$username'";
     $result = $conn->query($check_username);
     if ($result->num_rows > 0) {
         $error = "Erro: Nome de usuário já está em uso.";
     } else {
-        // Insere o novo usuário no banco de dados
+        
         $sql = "INSERT INTO usuario (username, password, perfil_id) VALUES ('$username', '$password', '$nivel_acesso')";
         if ($conn->query($sql) === TRUE) {
             $success = "Usuário registrado com sucesso!";
